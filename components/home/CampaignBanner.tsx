@@ -23,7 +23,9 @@ export default function CampaignBanner() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/campaigns/active?locale=${locale}`, { cache: "no-store" })
+    // Default cache mode on purpose: the API is CDN-cached for a minute, and
+    // `no-store` would send no-cache request headers on every visit.
+    fetch(`/api/campaigns/active?locale=${locale}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data: { campaign?: ActiveCampaign | null } | null) => {
         if (!cancelled) setCampaign(data?.campaign ?? null);
